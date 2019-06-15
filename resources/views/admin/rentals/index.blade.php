@@ -11,7 +11,6 @@
             <th scope="col">Copies</th>
             <th scope="col">Release Year</th>
             <th scope="col">Description</th>
-            <th scope="col">Rents</th>
             <th scope="col">Photo</th>
             <th scope="col">updated_at</th>
             <th scope="col">created_at</th>
@@ -28,7 +27,6 @@
                        <td>{{$book->copies}}</td>
                        <td>{{$book->release_year}}</td>
                        <td>{{$book->description}}</td>
-                       <td>{{$book->rents}}</td>
                        <td><img height="50" width="50" src="{{$book->photo ? asset($book->photo->file) : 'http://placehold.it/20x20'}}" alt=""></td>
                        <td>{{$book->created_at}}</td>
                        <td>{{$book->updated_at}}</td>
