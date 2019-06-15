@@ -26,6 +26,8 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('/admin','HomeController@index');
     Route::resource('/admin/users','AdminUsersController');
     Route::resource('/admin/authors','AdminAuthorsController');
+    Route::resource('/admin/books', 'AdminBooksController');
+
 });
 
 
