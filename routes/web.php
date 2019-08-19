@@ -29,6 +29,8 @@ Route::group(['middleware'=>'admin'],function(){
     Route::resource('/admin/authors','AdminAuthorsController');
     Route::resource('/admin/books', 'AdminBooksController');
     Route::resource('/admin/addresses', 'AdminAddressesController');
+    Route::resource('/admin/rentals', 'RentalsController');
+    Route::resource('/admin/stocks', 'StocksController');
 
 });
 

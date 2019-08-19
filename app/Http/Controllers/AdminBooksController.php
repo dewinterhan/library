@@ -85,6 +85,7 @@ class AdminBooksController extends Controller
      */
     public function update(BooksEditRequest $request, $id)
     {
+        //
         $book = Book::findOrFail($id);
         $input = $request->all();
         if($file = $request->file('photo_id')){

@@ -21,7 +21,6 @@ class CreateBooksTable extends Migration
             $table->integer('copies');
             $table->year('release_year');
             $table->text('description');
-            $table->integer('rents');
             $table->integer('photo_id')->nullable()->index()->unsigned();
             $table->timestamps();
         });

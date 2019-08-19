@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Rental extends Model
 {
     protected $fillable = [
-        'user_id', 'book_id', 'date_in', 'date_out', 'created_at', 'updated_at'
+        'user_id', 'stock_id', 'date_out', 'date_in'
     ];
     public function user(){
-        return $this->belongsTo('App\Photo');
+        return $this->belongsTo('App\User');
     }
-    public function books(){
-        return $this->belongsTo('App\Book');
+    public function stock(){
+        return $this->belongsTo('App\Stock');
     }
 }

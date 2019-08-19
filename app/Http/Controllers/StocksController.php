@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Book;
 use App\Rental;
+use App\Stock;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 
-class RentalsController extends Controller
+class StocksController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,8 @@ class RentalsController extends Controller
      */
     public function index()
     {
-        $rentals= Rental::paginate(10);
-        return view('admin.rentals.index', compact('rentals'));
+        $stocks = Stock::paginate(10);
+        return view('admin.stocks.index', compact('stocks'));
     }
 
     /**
@@ -27,7 +28,8 @@ class RentalsController extends Controller
      */
     public function create()
     {
-        //
+        $books = Book::pluck('title', 'id')->all();
+        return view('admin.stocks.create', compact('books'));
     }
 
     /**
@@ -38,7 +40,14 @@ class RentalsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $amount = $request->only('quantity');
+        $amount = (int)$amount['quantity'];
+        while ($amount != 0) {
+            $input = $request->only('book_id');
+            Stock::create($input);
+        }
+
+        return redirect('/admin/stocks');
     }
 
     /**
@@ -72,7 +81,28 @@ class RentalsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //Dit is een test
+        $stock = Stock::findOrFail($id);
+
+        if ($stock['available'] == 1) {
+            $stock['available'] = 0;
+            $rental = [
+                'user_id' => Auth::id(),
+                'stock_id' => $id,
+                'date_out' => date("y-m-d"),
+                'date_in' => Null,
+            ];
+            Rental::create($rental);
+            $stock->update();
+        } else {
+            $rental = Rental::where("stock_id", "$id")->first();
+            $stock['available'] = 1;
+            $rental['date_in'] = date("y-m-d");
+            $rental->update();
+            $stock->update();
+        }
+        return redirect('admin/stocks');
+
     }
 
     /**
@@ -83,37 +113,8 @@ class RentalsController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
-
-    public function books(){
-        $rentals = Rental::all();
-        return view('books', compact('rentals'));
-    }
-
-    public function bookRented($id)
-    {
-        $book= Book::findOrFail($id);
-        if ($book->rents < $book->copies) {
-            $newRent = value($book->rents)+1;
-            $book->rents = $newRent;
-            $book->save;
-        }
-        else {
-            return back()->with('alert','Sorry all the copies of this book are rented at the moment.');
-        }
-    }
-
-    public function bookReturned($id){
-        $book = Book::findOrFail($id);
-        if ($book->rents != 0){
-            $newReturn = value($book->rents)-1;
-            $book->rents = $newReturn;
-            $book->save();
-            return back()->with('alert','Thanks for returning the book you rented.');
-        }
-        else{
-            return back()->with('alert', 'Are you sure that you are returning the right book? We have al our copies of that book.');
-        }
+        $stock = Stock::findOrFail($id);
+        $stock->delete();
+        return redirect('admin/stocks');
     }
 }

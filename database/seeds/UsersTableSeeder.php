@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
            'role_id'=> 1,
            'is_active' => 1,
            'name'=>'Han Dewinter',
-           'email'=>'dewinterdev@gmail.com',
+           'email'=>'test@gmail.com',
            'password'=>bcrypt(123456),
            'remember_token'=>str_random(10)
         ]);
